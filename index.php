@@ -47,24 +47,57 @@
 <?php
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
-    $email= $_POST['emailfield'];
-    $password= $_POST['passwordfield'];
-    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-  your submitted info is '.$email. ' and password is '.$password. '
+  $name= $_POST['name'];  
+  $email= $_POST['emailfield'];
+  $description=$_POST['desc'];
+ 
+  
+
+$servername="localhost";
+$username="root";
+$password="";
+$database="contacts";
+
+$conn = mysqli_connect($servername,$username,$password,$database);
+if($conn)
+{  
+    echo 'Connection is successful'; 
+$sql= "INSERT INTO `contactus` (`Name`, `Email`, `Concern`, `date`) VALUES ( '$name', '$email', '$description', current_timestamp());";
+$result = mysqli_query($conn,$sql);
+if($result)
+{
+  echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+  your submitted info is submitted successfully
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>';
+}
+else{
+    echo 'sorry there is issue in submitting data';
+}
+
+}
+else if(!$conn)
+{
+ echo 'connection failed';
+}
 };
 ?>
 <div class="container">
 <form action="/Nimra/index.php" method="post">
+<div class="mb-3">
+    <label for="name" class="form-label">Name</label>
+    <input type="text" name="name" class="form-control" id="name" aria-describedby="emailHelp">
+  
+  </div>
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Email address</label>
     <input type="email" name="emailfield" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
   </div>
+  
   <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" name= "passwordfield"class="form-control" id="exampleInputPassword1">
+    <label for="desc" class="form-label">Concern</label>
+    <textarea class="form-control" name="desc" id="desc" cols="30" rows="10"></textarea>
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
